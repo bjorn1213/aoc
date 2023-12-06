@@ -1,11 +1,8 @@
-from pathlib import Path
+import re
 import numpy as np
 
-dirpath = Path("day5")
-fname = dirpath / "day5.txt"
-# fname = dirpath / "day5_small.txt"
-
-with open(fname, "r") as f:
+with open(r"AoC2023\day5\day5_input.txt") as f:
+    # with open(r"AoC2023\day5\day5_inputsmall.txt") as f:
     lines = f.readlines()
 
 
@@ -33,7 +30,7 @@ class MappingClass:
 
     def __getitem__(self, key):
         available_ranges = list(self.maps.keys())
-        applicable = [r for r in available_ranges if r < key]
+        applicable = [r for r in available_ranges if r <= key]
         if len(applicable) == 0:
             return key
         r = max(applicable)
@@ -66,7 +63,11 @@ for line in lines:
 
     if "seeds:" in l:
         _, l = l.split(":")
-        seeds = set([int(s) for s in l.split(" ") if s != ""])
+        seedinput = list([int(s) for s in l.split(" ") if s != ""])
+
+        for a, b in zip(seedinput[::2], seedinput[1::2]):
+            seeds = seeds.union(set([s for s in range(a, a + b)]))
+
     elif l == "":
         continue
     elif not l[0].isnumeric():
