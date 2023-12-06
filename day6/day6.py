@@ -29,9 +29,8 @@ for t, d in zip(times, distances):
     total *= options
     # print(t, d, options)
 
+# pt 1
+print(total)
 
-# print(total)
-
-# get_option_count(30, 200)
-
+# pt 2
 print(get_option_count(38947970, 241154910741091))
