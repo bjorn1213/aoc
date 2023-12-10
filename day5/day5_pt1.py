@@ -9,50 +9,43 @@ with open(fname, "r") as f:
     lines = f.readlines()
 
 
-def merge_maps(map1, map2):
-    it1 = iter(sorted(map1, key=lambda x: x[0]))
-    it2 = iter(sorted(map2, key=lambda x: x[0]))
+def add_map_to_maplist(maplist, map):
+    new_maplist = []
 
-    def get_next(it):
-        try:
-            return next(it)
-        except:
-            return None
+    for curmap in sorted(maplist, key=lambda x: x[0]):
+        # curmap is left(overlapping) of map
+        if curmap[0] <= map[0] <= curmap[1] <= map[1]:
+            if curmap[0] < map[0]:
+                new_maplist.append((curmap[0], map[0] - 1, curmap[2]))
+            new_maplist.append((map[0], curmap[1], curmap[2] + map[2]))
 
-    rng1 = get_next(it1)
-    rng2 = get_next(it2)
+        # curmap is right(overlapping) of map
+        elif map[0] <= curmap[0] <= map[1] <= curmap[1]:
+            new_maplist.append((curmap[0], map[1], map[2] + curmap[2]))
+            if map[1] < curmap[1]:
+                new_maplist.append((map[1] + 1, curmap[1], curmap[2]))
 
-    new_maps = []
-
-    prev_min = -np.inf
-
-    while rng1 or rng2:
-        if rng1 is None:
-            lb, ub, delta = rng2
-            rng2 = get_next(it2)
-        elif rng2 is None:
-            lb, ub, delta = rng1
-            rng1 = get_next(it1)
+        # map is contained in curmap
+        elif curmap[0] < map[0] <= map[1] < curmap[1]:
+            new_maplist.append((curmap[0], map[0] - 1, curmap[2]))
+            new_maplist.append((map[0], map[1], curmap[2] + map[2]))
+            new_maplist.append((map[1] + 1, curmap[1], curmap[2]))
+        # curmap is contained in map
+        elif map[0] < curmap[0] <= curmap[1] < map[1]:
+            new_maplist.append((curmap[0], curmap[1], curmap[2] + map[2]))
+        elif curmap[1] < map[0]:
+            new_maplist.append(curmap)
+        elif map[1] < curmap[0]:
+            new_maplist.append(curmap)
         else:
-            x = np.argmin([rng1[0], rng2[0]])
-            y = np.argmin([rng1[1], rng2[1]])
+            print("uncaught!")
+    return new_maplist
 
-            z = [rng1, rng2]
-            lb = np.maximum(z[x][0], prev_min)
-            ub = z[y][1]
-            delta = rng1[2] + rng2[2]
 
-            prev_min = lb + 1
-
-            if y == 0:
-                rng2 = (ub + 1, rng2[1], rng2[2])
-                rng1 = get_next(it1)
-            else:
-                rng1 = (ub + 1, rng1[1], rng1[2])
-                rng2 = get_next(it2)
-        n = (lb, ub, delta)
-        new_maps.append(n)
-
+def merge_maps(map1, map2):
+    new_maps = map1
+    for map in map2:
+        new_maps = add_map_to_maplist(new_maps, map)
     return new_maps
 
 
