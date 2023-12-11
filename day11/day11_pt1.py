@@ -6,7 +6,7 @@ np.set_printoptions(linewidth=200, formatter={"numpystr": lambda x: x})
 
 dirpath = Path("day11")
 fname = dirpath / "day11.txt"
-# fname = dirpath / "day11_small.txt"
+fname = dirpath / "day11_small.txt"
 
 with open(fname, "r") as f:
     lines = f.readlines()
@@ -23,25 +23,20 @@ x = 1
 h_duplicates = np.where(np.all(grid == ".", axis=0))[0]
 v_duplicates = np.where(np.all(grid == ".", axis=1))[0]
 
-coords = [(i, j) for i, j in zip(*np.where(grid == "#"))]
+x_vals = list(h_duplicates) + list(range(len(lines[0]) - 1))
+x_vals.sort()
 
-dup_factor = 1_000_000
+y_vals = list(v_duplicates) + list(range(len(lines)))
+y_vals.sort()
+
+grid = np.vstack(tuple(grid[i, :] for i in y_vals))
+grid = np.vstack(tuple(grid[:, i] for i in x_vals)).T
+
+coords = [(i, j) for i, j in zip(*np.where(grid == "#"))]
 
 total = 0
 for c1 in coords:
     for c2 in coords:
-        h_dups = (
-            (min(c1[0], c2[0]) <= v_duplicates) & (v_duplicates <= max(c1[0], c2[0]))
-        ).sum()
-        v_dups = (
-            (min(c1[1], c2[1]) <= h_duplicates) & (h_duplicates <= max(c1[1], c2[1]))
-        ).sum()
-        dist = (
-            abs(c1[0] - c2[0])
-            + abs(c1[1] - c2[1])
-            + (max(0, h_dups) + max(0, v_dups)) * dup_factor
-            - v_dups
-            - h_dups
-        )
+        dist = abs(c1[0] - c2[0]) + abs(c1[1] - c2[1])
         total += dist
 print(total / 2)

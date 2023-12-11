@@ -2,7 +2,7 @@ from pathlib import Path
 import shutil
 import os
 
-day = 10
+day = 11
 
 dirpath = Path(f"day{day}")
 if dirpath.exists() and dirpath.is_dir():
