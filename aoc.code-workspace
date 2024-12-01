@@ -5,11 +5,11 @@
 		}
 	],
 	"settings": {
-		"editor.defaultFormatter": "ms-python.black-formatter",
+		"editor.defaultFormatter": "charliermarsh.ruff",
 		"editor.formatOnSave": true,
 		"[html]": {
 			"editor.defaultFormatter": "vscode.html-language-features"
 		},
-		"python.analysis.typeCheckingMode": "basic",
+		"python.analysis.typeCheckingMode": "basic"
 	}
 }
