@@ -4,14 +4,16 @@ import os
 
 day = 2
 
-dirpath = Path(f"day{day}")
-if dirpath.exists() and dirpath.is_dir():
-    shutil.rmtree(dirpath)
+for day in range(3, 26):
+    dirpath = Path(f"day{day}")
+    if dirpath.exists() and dirpath.is_dir():
+        shutil.rmtree(dirpath)
 
-os.mkdir(dirpath)
-open(dirpath / f"day{day}.txt", "w").close()
-open(dirpath / f"day{day}_small.txt", "w").close()
-contents = f"""from pathlib import Path
+    os.mkdir(dirpath)
+    open(dirpath / f"day{day}.txt", "w").close()
+    open(dirpath / f"day{day}_small.txt", "w").close()
+    contents = f"""
+from pathlib import Path
 
 dirpath = Path("day{day}")
 fname = dirpath / "day{day}.txt"
@@ -20,10 +22,10 @@ fname = dirpath / "day{day}.txt"
 with open(fname, "r") as f:
     lines = f.readlines()
 
-"""
+    """
 
-with open(dirpath / f"day{day}_pt1.py", "w") as f:
-    f.write(contents)
+    with open(dirpath / f"day{day}_pt1.py", "w") as f:
+        f.write(contents)
 
-with open(dirpath / f"day{day}_pt2.py", "w") as f:
-    f.write(contents)
+    with open(dirpath / f"day{day}_pt2.py", "w") as f:
+        f.write(contents)
