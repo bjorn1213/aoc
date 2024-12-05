@@ -1,15 +1,15 @@
 from pathlib import Path
 
 dirpath = Path("day5")
-# fname = dirpath / "day5.txt"
-fname = dirpath / "day5_small.txt"
+fname = dirpath / "day5.txt"
+# fname = dirpath / "day5_small.txt"
 
 with open(fname, "r") as f:
     lines = f.readlines()
 
 
 def process_rule(line):
-    rule = tuple(line.split("|"))
+    rule = tuple(int(p) for p in line.split("|"))
     return rule
 
 
@@ -53,7 +53,9 @@ def is_valid(update, rules):
 score = 0
 
 for update in updates:
-    if is_valid(update, rules):
-        score += 1
+    b = is_valid(update, rules)
+    if b:
+        score += update["middle"]
+    # print(b, update["middle"])
 
 print(score)
