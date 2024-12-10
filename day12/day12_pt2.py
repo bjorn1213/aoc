@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 dirpath = Path("day12")
@@ -7,5 +6,4 @@ fname = dirpath / "day12.txt"
 
 with open(fname, "r") as f:
     lines = f.readlines()
-
-    
+lines = [l.replace("\n", "") for l in lines]

@@ -21,7 +21,7 @@ fname = dirpath / "day{day}.txt"
 
 with open(fname, "r") as f:
     lines = f.readlines()
-
+lines = [l.replace("\n", "") for l in lines]
     """
 
     with open(dirpath / f"day{day}_pt1.py", "w") as f:
