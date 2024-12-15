@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Literal
+import time
 
 
 dirpath = Path("day15")
@@ -190,16 +191,19 @@ for y, line in enumerate(lines):
 
 
 def print_grid():
+    s = ""
     for y in range(height):
         for x in range(width):
             coordinates = (x, y)
             node: Node = coordinate_node_map[coordinates]
-            print(node_type_mapping_inv[node.node_type], end="")
-        print()
+            s += node_type_mapping_inv[node.node_type]
+        s += "\n"
+    print(f"\033[0;3H\n{s}", end="", flush=True)
 
 
 # print_grid()
-
+print()
+print()
 robot_node: Node = coordinate_node_map[robot_location]
 for i, character in enumerate(lines[-1]):
     # print(f"{i}, moving {character}")
@@ -208,7 +212,7 @@ for i, character in enumerate(lines[-1]):
         robot_node = robot_node.get_neighbour(direction)
 
     # print(f"\nMoved {character}\n")
-    # print_grid()
+    print_grid()
 
 total = 0
 for location, node in coordinate_node_map.items():
